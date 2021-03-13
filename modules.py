@@ -1,4 +1,11 @@
 import pandas as pd
+from numpy import random
+import time
+
+import torch
+from torch.utils.data import TensorDataset
+from torch.utils.data import DataLoader
+
 def building_vocabulary(data):
     # TODO: implement!
     WORDSINLIST = []
@@ -30,3 +37,121 @@ def word_to_one_hot(word, V):
     else:
       lis.append(0)
   return lis
+
+
+# TODO: implement!
+def sampling_prob(word, WORDSINLIST):
+    COUNT = 0
+    COUNT = WORDSINLIST.count(word)
+
+    Z = COUNT / len(WORDSINLIST)
+    if Z == 0:
+        return 0
+
+    return ((((Z / 0.001) ** .5) + 1) * (0.001 / Z))
+
+
+def get_target_context(sentence, WORDSINLIST,  window_size=4):
+    words = sentence.split()
+
+    count = 0
+    for i in words:
+        templis = []
+
+        TOTALCOUNT = 0
+
+        j = count - 1
+
+        moves = 0
+
+        while j >= 0 and moves < (window_size / 2):
+            # print(sampling_prob(words[j]))
+            if sampling_prob(words[j]) > random.rand():
+                templis.append(WORDSINLIST.index(words[j]))
+                TOTALCOUNT += 1
+            j -= 1
+            moves += 1
+
+        t = count
+        templis1 = []
+
+        FLAG = True
+
+        while moves < window_size and FLAG:
+
+            if t + 1 < len(words):
+                if sampling_prob(words[t + 1]) > random.rand():
+                    templis1.append(WORDSINLIST.index(words[t + 1]))
+                    moves += 1
+                    TOTALCOUNT += 1
+            if t + 1 >= len(words):
+                FLAG = False
+            t += 1
+
+        templis2 = []
+
+        while TOTALCOUNT < window_size and j >= 0:
+            if sampling_prob(words[j]) > random.rand():
+                templis2.append(WORDSINLIST.index(words[j]))
+                TOTALCOUNT += 1
+            j -= 1
+
+        templis3 = []
+
+        FLAG1 = True
+        while TOTALCOUNT < window_size and FLAG1:
+            if t + 1 < len(words):
+                if sampling_prob(words[t + 1]) > random.rand():
+                    templis3.append(WORDSINLIST.index(words[t + 1]))
+                    TOTALCOUNT += 1
+            if t + 1 >= len(words):
+                FLAG1 = False
+            t += 1
+
+        finallist = templis + templis2 + templis1 + templis3
+        yield (words[count], finallist)
+
+        count += 1
+
+
+
+
+def create_currents_contexts(df, V):
+
+  currentlist = []
+  contextlist = []
+  start_time = time.time()
+
+  print("appending to list started...")
+  for sentence in df['text']:
+    print(sentence)
+    gen= get_target_context(sentence, window_size=4)
+    for text in range(len(sentence.split())-1):
+      current, context = next(gen)
+      current_one_hot = word_to_one_hot(current)
+
+      current_one_hot = torch.FloatTensor(current_one_hot)
+
+      currentlist.append(current_one_hot)
+
+      while(len(context)< 4):
+        context.append(len(V)+1)
+
+      context = torch.tensor(context)
+      contextlist.append(context)
+
+  print("appending to list ended.")
+  print("--- %s seconds ---" % (time.time() - start_time))
+  return currentlist, contextlist
+
+def return_dataloader(currentlist, contextlist, batch_size):
+  x_tensor = torch.stack(currentlist)
+  y_tensor = torch.stack(contextlist)
+
+  # Define dataset
+  train_ds = TensorDataset(x_tensor, y_tensor)
+
+  # Define data loader
+  train_dl = DataLoader(train_ds, batch_size, shuffle=True)
+
+  return train_dl
