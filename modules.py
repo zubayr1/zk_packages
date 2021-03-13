@@ -6,6 +6,9 @@ import torch
 from torch.utils.data import TensorDataset
 from torch.utils.data import DataLoader
 
+
+
+
 def building_vocabulary(data):
     # TODO: implement!
     WORDSINLIST = []
@@ -66,7 +69,7 @@ def get_target_context(sentence, WORDSINLIST,  window_size=4):
 
         while j >= 0 and moves < (window_size / 2):
             # print(sampling_prob(words[j]))
-            if sampling_prob(words[j]) > random.rand():
+            if sampling_prob(words[j], WORDSINLIST) > random.rand():
                 templis.append(WORDSINLIST.index(words[j]))
                 TOTALCOUNT += 1
             j -= 1
@@ -80,7 +83,7 @@ def get_target_context(sentence, WORDSINLIST,  window_size=4):
         while moves < window_size and FLAG:
 
             if t + 1 < len(words):
-                if sampling_prob(words[t + 1]) > random.rand():
+                if sampling_prob(words[t + 1], WORDSINLIST) > random.rand():
                     templis1.append(WORDSINLIST.index(words[t + 1]))
                     moves += 1
                     TOTALCOUNT += 1
@@ -91,7 +94,7 @@ def get_target_context(sentence, WORDSINLIST,  window_size=4):
         templis2 = []
 
         while TOTALCOUNT < window_size and j >= 0:
-            if sampling_prob(words[j]) > random.rand():
+            if sampling_prob(words[j], WORDSINLIST) > random.rand():
                 templis2.append(WORDSINLIST.index(words[j]))
                 TOTALCOUNT += 1
             j -= 1
@@ -101,7 +104,7 @@ def get_target_context(sentence, WORDSINLIST,  window_size=4):
         FLAG1 = True
         while TOTALCOUNT < window_size and FLAG1:
             if t + 1 < len(words):
-                if sampling_prob(words[t + 1]) > random.rand():
+                if sampling_prob(words[t + 1], WORDSINLIST) > random.rand():
                     templis3.append(WORDSINLIST.index(words[t + 1]))
                     TOTALCOUNT += 1
             if t + 1 >= len(words):
@@ -116,7 +119,7 @@ def get_target_context(sentence, WORDSINLIST,  window_size=4):
 
 
 
-def create_currents_contexts(df, V):
+def create_currents_contexts(df,WORDSINLIST, V):
 
   currentlist = []
   contextlist = []
@@ -125,10 +128,10 @@ def create_currents_contexts(df, V):
   print("appending to list started...")
   for sentence in df['text']:
     print(sentence)
-    gen= get_target_context(sentence, window_size=4)
+    gen= get_target_context(sentence,WORDSINLIST, window_size=4)
     for text in range(len(sentence.split())-1):
       current, context = next(gen)
-      current_one_hot = word_to_one_hot(current)
+      current_one_hot = word_to_one_hot(current, V)
 
       current_one_hot = torch.FloatTensor(current_one_hot)
 
