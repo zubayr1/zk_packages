@@ -16,9 +16,7 @@ def building_vocabulary(data):
         for j in i:
             WORDSINLIST.append(j)
 
-    # WORDSINLIST = df['text'].values.tolist()
 
-    # print(WORDSINLIST)
     tempv = set(WORDSINLIST)
 
     V = pd.DataFrame({'Values': data} for data in tempv)
@@ -126,7 +124,7 @@ def create_currents_contexts(df,WORDSINLIST, V):
   start_time = time.time()
 
   print("appending to list started...")
-  for sentence in df['text']:
+  for sentence in df['sentence']:
     print(sentence)
     gen= get_target_context(sentence,WORDSINLIST, window_size=4)
     for text in range(len(sentence.split())-1):
