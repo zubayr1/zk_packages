@@ -1,3 +1,4 @@
+import pandas as pd
 def building_vocabulary(data):
     # TODO: implement!
     WORDSINLIST = []
@@ -21,7 +22,7 @@ def building_vocabulary(data):
 # WORDSINLIST, V = building_vocabulary(data)
 
 
-def word_to_one_hot(word):
+def word_to_one_hot(word, V):
   lis=[]
   for i in V['Values']:
     if i.strip() in word.strip() and word.strip() in i.strip():
