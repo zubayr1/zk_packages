@@ -6,7 +6,8 @@ import torch
 from torch.utils.data import TensorDataset
 from torch.utils.data import DataLoader
 
-
+import torch.nn as nn
+import torch.nn.functional as F
 
 
 def building_vocabulary(data):
