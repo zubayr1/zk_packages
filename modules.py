@@ -156,3 +156,28 @@ def return_dataloader(currentlist, contextlist, batch_size):
   train_dl = DataLoader(train_ds, batch_size, shuffle=True)
 
   return train_dl
+
+
+class Word2vec(nn.Module):
+    def __init__(self, LENGTH):
+      super(Word2vec, self).__init__()
+      self.LENGTH = LENGTH
+      self.FC1 = nn.Linear(self.LENGTH, embedding_size,0)
+
+     # initialization of weights
+      torch.nn.init.xavier_normal_(self.FC1.weight)
+
+      self.FC2 = nn.Linear(embedding_size, self.LENGTH,0)
+      # initialization of weights
+      torch.nn.init.xavier_normal_(self.FC2.weight)
+
+    def forward(self, one_hot):
+      #one_hot = torch.tensor(one_hot)
+      x = self.FC1(one_hot)
+      y = self.FC2(x)
+
+
+      m = nn.LogSoftmax(dim=None)
+      y = m(y)
+      return y
+
