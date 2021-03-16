@@ -160,9 +160,10 @@ def return_dataloader(currentlist, contextlist, batch_size):
 
 
 class Word2vec(nn.Module):
-    def __init__(self, LENGTH):
+    def __init__(self, LENGTH, embedding_size):
       super(Word2vec, self).__init__()
       self.LENGTH = LENGTH
+      self.embedding_size = embedding_size
       self.FC1 = nn.Linear(self.LENGTH, embedding_size,0)
 
      # initialization of weights
