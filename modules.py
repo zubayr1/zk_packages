@@ -10,10 +10,10 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 
-def building_vocabulary(data):
+def building_vocabulary(data, string):
     # TODO: implement!
     WORDSINLIST = []
-    for i in list(data['sentence'].str.split()):
+    for i in list(data[string].str.split()):
         for j in i:
             WORDSINLIST.append(j)
 
@@ -118,14 +118,14 @@ def get_target_context(sentence, WORDSINLIST,  window_size=4):
 
 
 
-def create_currents_contexts(df,WORDSINLIST, V):
+def create_currents_contexts(df,WORDSINLIST, V, string):
 
   currentlist = []
   contextlist = []
   start_time = time.time()
 
   print("appending to list started...")
-  for sentence in df['sentence']:
+  for sentence in df[string]:
     print(sentence)
     gen= get_target_context(sentence,WORDSINLIST, window_size=4)
     for text in range(len(sentence.split())-1):

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="420fa441-80ce-405b-a3cb-365f17b71798" name="Default Changelist" comment="sec5">
-      <change beforePath="$PROJECT_DIR$/modules.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules.py" afterDir="false" />
+    <list default="true" id="420fa441-80ce-405b-a3cb-365f17b71798" name="Default Changelist" comment="sec6">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -90,7 +90,14 @@
       <option name="project" value="LOCAL" />
       <updated>1615890719359</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="sec6">
+      <created>1615890970657</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1615890970657</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -111,6 +118,7 @@
     <MESSAGE value="sec3" />
     <MESSAGE value="sec4" />
     <MESSAGE value="sec5" />
-    <option name="LAST_COMMIT_MESSAGE" value="sec5" />
+    <MESSAGE value="sec6" />
+    <option name="LAST_COMMIT_MESSAGE" value="sec6" />
   </component>
 </project>
